@@ -3,14 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Contracts\Providers\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
 
 class   AuthController extends Controller
 {
@@ -84,7 +79,7 @@ class   AuthController extends Controller
     /**
      * Вернет ошибку авторизации.
      *
-
+     * @return \Illuminate\Http\Response
      */
     public function loginFail()
     {
