@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CatalogController;
 use App\Http\Controllers\Api\Randomizer\ColorController;
 use App\Http\Controllers\Api\Randomizer\TagController;
@@ -17,9 +18,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::get('logout', [AuthController::class, 'logout']);
+    Route::get('refresh', [AuthController::class, 'refresh']);
+    Route::get('me', [AuthController::class, 'me']);
+    Route::get('loginFail', [AuthController::class, 'loginFail'])->name('loginFail');
+
 });
-Route::get('/random', [ColorController::class, 'getRandomColor']);
-Route::get('/tags', [TagController::class, 'getTags']);
-Route::get('/catalog', [CatalogController::class, 'index']);
+
+Route::get('/catalog', [CatalogController::class, 'index'])->middleware('auth:api');;

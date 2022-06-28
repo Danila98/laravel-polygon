@@ -39,10 +39,9 @@ services:
     polygon_db:
         image: mysql:5.7.22
         container_name: polygon_db
-        restart: unless-stopped
-        tty: true
+        restart: always
         ports:
-            - "3310:3306"
+            - "3306:3306"
         environment:
             MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
             MYSQL_DATABASE: "${DB_DATABASE}"
