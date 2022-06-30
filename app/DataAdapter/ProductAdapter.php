@@ -14,6 +14,7 @@ class ProductAdapter extends DataAdapter
     public function getModelData(Model $product) : array
     {
         return [
+            'id' => $product->id,
             'name' => $product->name,
             'image' => $product->image,
             'price' => $product->price,

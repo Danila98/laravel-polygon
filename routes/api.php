@@ -35,7 +35,7 @@ Route::group([
     Route::get('/', [CatalogController::class, 'list'])->middleware('auth:api');
     Route::get('/product/{id}', [CatalogController::class, 'show'])->middleware('auth:api');
     Route::post('/add', [CatalogController::class, 'store'])->middleware('auth:api');
-    Route::put('/update', [CatalogController::class, 'update'])->middleware('auth:api');
-    Route::delete('/delete', [CatalogController::class, 'destroy'])->middleware('auth:api');
+    Route::put('/update/{id}', [CatalogController::class, 'update'])->middleware('auth:api');
+    Route::delete('/delete/{id}', [CatalogController::class, 'destroy'])->middleware('auth:api');
 });
 
