@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
-class   AuthController extends Controller
+class   AuthController extends ApiController
 {
     /**
      * Create a new AuthController instance.
@@ -55,7 +54,7 @@ class   AuthController extends Controller
             'password' => bcrypt($request->get('password')),
         ]);
         $token = auth('api')->attempt($validator->validated());
-        return $this->respondWithToken($token);
+        return $this->sendResponse(200, $this->respondWithToken($token));
     }
     /**
      * Get a JWT via given credentials.
@@ -88,7 +87,7 @@ class   AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         $token = auth('api')->attempt($credentials);
-        return $this->respondWithToken($token);
+        return $this->sendResponse(200, $this->respondWithToken($token));
     }
     /**
      * @OA\Get(
@@ -113,7 +112,7 @@ class   AuthController extends Controller
     public function logout(Request $request)
     {
         auth()->logout();
-        return response()->json(['message' => 'Успешно разлогирован']);
+        return $this->sendResponse(200, ['message' => 'Успешно разлогирован']);
     }
     /**
      * Refresh a token.
@@ -142,39 +141,59 @@ class   AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api')->refresh());
+        return $this->sendResponse(200, (array)$this->respondWithToken(auth('api')->refresh()));
     }
     /**
      * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @OA\Get(
+     *      path="/api/auth/me",
+     *      tags={"Авторизация"},
+     *      security={ {"bearer": {} }},
+     *      summary="Получить авторизовааного пользоавателя ",
+     *      description="Получить авторизовааного пользоавателя ",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="id", type="int", example=11),
+     *              @OA\Property(property="name", type="string", example="Oksana"),
+     *              @OA\Property(property="email", type="string", example="test@test.ru"),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *     )
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return $this->sendResponse(200, (array)auth('api')->user());
     }
     /**
      * Вернет ошибку авторизации.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function loginFail()
     {
-        return response('Unauthorized', 401);
+        return $this->sendError(401, 'Unauthorized', 'Пользователь не авторизован');
     }
     /**
      * Get the token array structure.
      *
      * @param  string $token
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return array
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60
-        ]);
+        ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Accounting\Account;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -66,5 +67,10 @@ class User extends \TCG\Voyager\Models\User implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function account()
+    {
+        return $this->hasOne(Account::class);
     }
 }

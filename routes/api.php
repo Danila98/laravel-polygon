@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Accounting\AccountController;
+use App\Http\Controllers\Api\Accounting\CategoryController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Randomizer\ColorController;
 use App\Http\Controllers\Api\Randomizer\TagController;
@@ -30,12 +32,19 @@ Route::group([
 });
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'catalog'
+    'prefix' => 'category'
 ], function ($router) {
-    Route::get('/', [CatalogController::class, 'list'])->middleware('auth:api');
-    Route::get('/product/{id}', [CatalogController::class, 'show'])->middleware('auth:api');
-    Route::post('/add', [CatalogController::class, 'store'])->middleware('auth:api');
-    Route::put('/update/{id}', [CatalogController::class, 'update'])->middleware('auth:api');
-    Route::delete('/delete/{id}', [CatalogController::class, 'destroy'])->middleware('auth:api');
+    Route::get('/', [CategoryController::class, 'list'])->middleware('auth:api');
+    Route::post('/add', [CategoryController::class, 'store'])->middleware('auth:api');
+    Route::put('/update/{id}', [CategoryController::class, 'update'])->middleware('auth:api');
+    Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->middleware('auth:api');
+    Route::get('/{id}', [CategoryController::class, 'show'])->middleware('auth:api');
 });
 
+Route::group([
+    'prefix' => 'account'
+], function ($router) {
+    Route::post('/store', [AccountController::class, 'setTotal']);
+    Route::get('/{id}', [AccountController::class, 'getAccount']);
+
+});

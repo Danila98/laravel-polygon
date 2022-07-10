@@ -1,19 +1,16 @@
 <?php
 
-namespace App\Models\Shop;
+namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kiryanov\Filter\Filter\Filterable;
 
-class Product extends Model
+class Category extends Model
 {
-    use HasFactory, Filterable;
-
+    use HasFactory;
     protected $fillable = [
         'id',
         'name',
-        'img',
-        'price',
+        'limit',
     ];
 }

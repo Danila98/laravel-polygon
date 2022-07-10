@@ -5,6 +5,372 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/account/{user_id}": {
+            "get": {
+                "tags": [
+                    "Аккаунт"
+                ],
+                "summary": "Получить Аккаунт по id пользователя",
+                "description": "Вернет Аккаунт по id",
+                "operationId": "aee8747b3e43116030914d091f61aec0",
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "path",
+                        "description": "ID Аккаунта",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "total": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 12.21
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/account/store": {
+            "post": {
+                "tags": [
+                    "Аккаунт"
+                ],
+                "summary": "Установить начальное значение счета",
+                "description": "Установить начальное значение счета",
+                "operationId": "95ca035b93b00957231a7642f2602b30",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "uid",
+                                    "total"
+                                ],
+                                "properties": {
+                                    "uid": {
+                                        "type": "integer",
+                                        "example": 11
+                                    },
+                                    "total": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                }
+            }
+        },
+        "/api/category": {
+            "get": {
+                "tags": [
+                    "Категории"
+                ],
+                "summary": "Получить список Категорий",
+                "description": "Вернет список Категорий",
+                "operationId": "6dd4a3f89346cf8364fb77e36432b31e",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "limit": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Fanger",
+                                                    "limit": 12312
+                                                },
+                                                {
+                                                    "id": "",
+                                                    "name": "",
+                                                    "limit": ""
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/category/{category_id}": {
+            "get": {
+                "tags": [
+                    "Категории"
+                ],
+                "summary": "Получить категорию по id",
+                "description": "Вернет категорию по id",
+                "operationId": "9773d99b8e5e81e25575f5e0d9737ab5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID категории",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 123
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/category/add": {
+            "post": {
+                "tags": [
+                    "Категории"
+                ],
+                "summary": "Добавить категорию",
+                "description": "Нужно передать все поля",
+                "operationId": "6baaa1e917d709ce91e18a335435b052",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "limit"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "limit": {
+                                        "type": "integer",
+                                        "example": 6521
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/category/update/{category_id}": {
+            "put": {
+                "tags": [
+                    "Категории"
+                ],
+                "summary": "Обновить Категрию",
+                "description": "Нужно передать все поля",
+                "operationId": "f5816d097ab76d537df745feb1e981a1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "limit"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "limit": {
+                                        "type": "integer",
+                                        "example": 6521
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/category/delete/{category_id}": {
+            "delete": {
+                "tags": [
+                    "Категории"
+                ],
+                "summary": "Удалить категорию по id",
+                "description": "Вернет булевое значение",
+                "operationId": "d5e0a6de0c9a4713f9239dad65563ba2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID категории",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/auth/register": {
             "post": {
                 "tags": [
@@ -172,105 +538,14 @@
                 ]
             }
         },
-        "/api/catalog": {
+        "/api/auth/me": {
             "get": {
                 "tags": [
-                    "Каталог"
+                    "Авторизация"
                 ],
-                "summary": "Получить список продуктов",
-                "description": "Вернет список продуктов",
-                "operationId": "getProductsList",
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "products": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": ""
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "image": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "price": {
-                                                        "type": "number",
-                                                        "format": "float",
-                                                        "example": ""
-                                                    },
-                                                    "netPay": {
-                                                        "type": "money",
-                                                        "example": ""
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "example": [
-                                                {
-                                                    "id": 1,
-                                                    "name": "Fanger",
-                                                    "image": "storage/images/test.png",
-                                                    "price": 808.12
-                                                },
-                                                {
-                                                    "id": "",
-                                                    "name": "",
-                                                    "image": "",
-                                                    "price": ""
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ]
-            }
-        },
-        "/api/catalog/product/{product_id}": {
-            "get": {
-                "tags": [
-                    "Каталог"
-                ],
-                "summary": "Получить товар по id",
-                "description": "Вернет товар по id",
-                "operationId": "e0ddd4c779f47adb08875850443eab1c",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID товарра",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        },
-                        "example": "1"
-                    }
-                ],
+                "summary": "Получить авторизовааного пользоавателя ",
+                "description": "Получить авторизовааного пользоавателя ",
+                "operationId": "b5de204f5e452ef51327c691aa99e77c",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -280,20 +555,15 @@
                                     "properties": {
                                         "id": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 11
                                         },
                                         "name": {
                                             "type": "string",
-                                            "example": "test"
+                                            "example": "Oksana"
                                         },
-                                        "image": {
+                                        "email": {
                                             "type": "string",
-                                            "example": "storage/images/test.png"
-                                        },
-                                        "price": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 12.21
+                                            "example": "test@test.ru"
                                         }
                                     },
                                     "type": "object"
@@ -303,162 +573,6 @@
                     },
                     "401": {
                         "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ]
-            }
-        },
-        "/api/catalog/add": {
-            "post": {
-                "tags": [
-                    "Каталог"
-                ],
-                "summary": "Добавить продукт",
-                "description": "Нужно передать все поля",
-                "operationId": "fc796921f947da4931b9fa12b7ff6858",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name",
-                                    "price",
-                                    "image"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "test"
-                                    },
-                                    "price": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 65.21
-                                    },
-                                    "image": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "422": {
-                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ]
-            }
-        },
-        "/api/catalog/update/{product_id}": {
-            "put": {
-                "tags": [
-                    "Каталог"
-                ],
-                "summary": "Обновить продукт",
-                "description": "Нужно передать все поля",
-                "operationId": "a90283edac959cf47bb91505eb757a2b",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name",
-                                    "price"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "test"
-                                    },
-                                    "price": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 65.21
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "422": {
-                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ]
-            }
-        },
-        "/api/catalog/delete/{product_id}": {
-            "delete": {
-                "tags": [
-                    "Каталог"
-                ],
-                "summary": "Удалить товар по id",
-                "description": "Вернет булевое значение",
-                "operationId": "77a92a2b950366e57d1d379b294bb2dd",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID товарра",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        },
-                        "example": "1"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Not found"
                     }
                 },
                 "security": [
