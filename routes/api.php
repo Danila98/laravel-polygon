@@ -2,10 +2,9 @@
 
 use App\Http\Controllers\Api\Accounting\AccountController;
 use App\Http\Controllers\Api\Accounting\CategoryController;
+use App\Http\Controllers\Api\Accounting\TransactionController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Randomizer\ColorController;
-use App\Http\Controllers\Api\Randomizer\TagController;
-use App\Http\Controllers\Api\Shop\CatalogController;
+use App\Models\Accounting\Transaction;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +38,16 @@ Route::group([
     Route::put('/update/{id}', [CategoryController::class, 'update'])->middleware('auth:api');
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->middleware('auth:api');
     Route::get('/{id}', [CategoryController::class, 'show'])->middleware('auth:api');
+});
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'transaction'
+], function ($router) {
+    Route::get('/', [TransactionController::class, 'list'])->middleware('auth:api');
+    Route::post('/add', [TransactionController::class, 'store'])->middleware('auth:api');
+    Route::put('/update/{id}', [TransactionController::class, 'update'])->middleware('auth:api');
+    Route::delete('/delete/{id}', [TransactionController::class, 'destroy'])->middleware('auth:api');
+    Route::get('/{id}', [TransactionController::class, 'show'])->middleware('auth:api');
 });
 
 Route::group([

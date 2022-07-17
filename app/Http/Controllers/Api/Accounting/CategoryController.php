@@ -5,10 +5,18 @@ namespace App\Http\Controllers\Api\Accounting;
 use App\DataAdapter\Accounting\CategoryAdapter;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Accounting\Category;
+use App\Repository\Accounting\CategoryRepository;
 use Illuminate\Http\Request;
 
 class CategoryController extends ApiController
 {
+    protected $categoryRepository;
+    protected $categoryAdapter;
+    public function __construct(CategoryRepository $categoryRepository, CategoryAdapter $adapter)
+    {
+        $this->categoryRepository = $categoryRepository;
+        $this->categoryAdapter = $adapter;
+    }
       /**
  * @OA\Get(
  *      path="/api/category",
@@ -63,10 +71,10 @@ class CategoryController extends ApiController
  *      )
  *     )
  */
-    public function list(CategoryAdapter $adapter)
+    public function list()
     {
-        $categories = Category::all();
-        return $this->sendResponse(200, ['categories' => $adapter->getArrayModelData($categories)]);
+        $categories = $this->categoryRepository->getByUser(auth('api')->user());
+        return $this->sendResponse(200, ['categories' => $this->categoryAdapter->getArrayModelData($categories)]);
     }
     /**
      * @OA\Get(
@@ -105,14 +113,14 @@ class CategoryController extends ApiController
      *      )
      *     )
      */
-    public function show(int $id, CategoryAdapter $adapter)
+    public function show(int $id)
     {
         if (!$category = Category::find($id))
         {
-            return response('Not found', 404);
+            return $this->sendError( 404, 'Not found');
         }
 
-        return $this->sendResponse(200, ['category' =>$adapter->getModelData($category)]);
+        return $this->sendResponse(200, ['category' => $this->categoryAdapter->getModelData($category)]);
     }
     /**
      * Создает Категорию
@@ -151,11 +159,11 @@ class CategoryController extends ApiController
             'name' => 'required',
             'limit' => 'required|numeric',
         ]);
-
         $request =  $request->all();
         $category = Category::create([
             'name' => $request['name'],
-            'limit' => $request['limit']
+            'limit' => $request['limit'],
+            'user_id' => auth('api')->user()->id
         ]);
         return $this->sendResponse(201, ['category' => $category]);
     }
@@ -189,13 +197,13 @@ class CategoryController extends ApiController
      * )
      * )
      */
-    public function update(Request $request, Category $category): \Illuminate\Http\JsonResponse
+    public function update(Request $request, int $category_id): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'name' => 'required',
             'limit' => 'required|numeric',
         ]);
-
+        $category = Category::find($category_id);
         $category->update($request->all());
         return $this->sendResponse(201, ['category' => $category]);
     }
@@ -238,8 +246,9 @@ class CategoryController extends ApiController
      *      )
      *     )
      */
-    public function destroy(Category $category)
+    public function destroy(int $category_id)
     {
+        $category = Category::find($category_id);
         $category->delete();
         return $this->sendResponse(201);
     }

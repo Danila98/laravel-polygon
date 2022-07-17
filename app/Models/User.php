@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Accounting\Account;
+use App\Models\Accounting\Category;
+use App\Models\Accounting\Transaction;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -72,5 +74,13 @@ class User extends \TCG\Voyager\Models\User implements JWTSubject
     public function account()
     {
         return $this->hasOne(Account::class);
+    }
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }
