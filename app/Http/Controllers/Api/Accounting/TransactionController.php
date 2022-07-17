@@ -6,6 +6,7 @@ use App\DataAdapter\Accounting\TransactionAdapter;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Accounting\Transaction;
 use App\Repository\Accounting\TransactionRepository;
+use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,13 @@ class TransactionController extends ApiController
 
     protected TransactionRepository $transactionRepository;
     protected TransactionAdapter $transactionAdapter;
+    protected TransactionService $transactionService;
 
-    public function __construct(TransactionRepository $transactionRepository, TransactionAdapter $transactionAdapter)
+    public function __construct(TransactionRepository $transactionRepository, TransactionAdapter $transactionAdapter, TransactionService $transactionService)
     {
         $this->transactionRepository = $transactionRepository;
         $this->transactionAdapter = $transactionAdapter;
+        $this->transactionService = $transactionService;
     }
     /**
      * @OA\Get(
@@ -184,12 +187,15 @@ class TransactionController extends ApiController
             'type' => 'required',
         ]);
         $request =  $request->all();
+        $user = auth('api')->user();
         $transaction = Transaction::create([
             'description' => $request['description'],
             'category_id' => $request['category_id'],
             'amount' => $request['amount'],
             'type' => $request['type'],
+            'user_id' => $user->id,
         ]);
+        $this->transactionService->updateAccountTotal($transaction, $user);
         return $this->sendResponse(201, ['transaction' => $transaction]);
     }
     /**
