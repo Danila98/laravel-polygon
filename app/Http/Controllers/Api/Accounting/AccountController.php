@@ -46,7 +46,7 @@ class AccountController extends ApiController
      *      )
      *     )
      */
-    public function getAccount(int $userId, AccountAdapter $adapter)
+    public function getAccount($userId, AccountAdapter $adapter)
     {
         $account = User::find($userId)->account;
         return $this->sendResponse(200, ['account' => $adapter->getModelData($account)]);

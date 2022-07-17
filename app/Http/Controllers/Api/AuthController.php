@@ -170,7 +170,7 @@ class   AuthController extends ApiController
      */
     public function me()
     {
-        return $this->sendResponse(200, (array)auth('api')->user());
+        return $this->sendResponse(200, ['user' => auth('api')->user()]);
     }
     /**
      * Вернет ошибку авторизации.
